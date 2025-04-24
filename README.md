@@ -332,9 +332,6 @@ Please write tests for new functionality and ensure all tests pass before submit
 - No user authentication for managing subscriptions (email-based access only)
 - No support for location-based services or geolocation
 
-### Subscription Management
-![Subscription Management](screenshots/manage-subscriptions.png)
-
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

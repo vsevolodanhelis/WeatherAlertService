@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: weather-alert-app
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - weather-alert-network
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    container_name: weather-alert-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - weather-alert-network
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: weather-alert-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - weather-alert-db-data:/var/lib/mysql
+    networks:
+      - weather-alert-network
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: weather-alert-scheduler
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - weather-alert-network
+    depends_on:
+      - app
+      - db
+    command: php artisan schedule:work
+
+networks:
+  weather-alert-network:
+    driver: bridge
+
+volumes:
+  weather-alert-db-data:
+    driver: local

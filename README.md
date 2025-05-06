@@ -338,23 +338,6 @@ Please write tests for new functionality and ensure all tests pass before submit
 - No user authentication for managing subscriptions (email-based access only)
 - No support for location-based services or geolocation
 
-## Screenshots
-
-### Home Page
-![Home Page](screenshots/home.png)
-
-### Weather Search
-![Weather Search](screenshots/weather-search.png)
-
-### Weather Details
-![Weather Details](screenshots/weather-details.png)
-
-### Alert Subscription
-![Alert Subscription](screenshots/subscription-form.png)
-
-### Subscription Management
-![Subscription Management](screenshots/manage-subscriptions.png)
-
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

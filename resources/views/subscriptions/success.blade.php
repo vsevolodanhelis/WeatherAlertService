@@ -34,15 +34,15 @@
             </div>
 
             <!-- Success message and details -->
-            <div class="p-8 text-center">
+            <div class="p-6 text-center">
                 <div class="max-w-md mx-auto">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Thank you for subscribing!</h2>
-                    <p class="text-gray-600 mb-6">You will now receive weather alerts when your specified conditions are met. We'll check the weather conditions daily and send you an email notification.</p>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-3">Thank you for subscribing!</h2>
+                    <p class="text-gray-600 mb-4">You will now receive weather alerts when your specified conditions are met. We'll check the weather conditions daily and send you an email notification.</p>
 
                     <!-- Subscription details card -->
-                    <div class="bg-gray-50 rounded-lg p-6 mb-8 text-left">
-                        <h3 class="text-lg font-medium text-gray-800 mb-4">Subscription Details</h3>
-                        <div class="space-y-3">
+                    <div class="bg-gray-50 rounded-lg p-6 mb-4 text-left">
+                        <h3 class="text-lg font-medium text-gray-800 mb-3">Subscription Details</h3>
+                        <div class="space-y-2">
                             <div class="flex items-center">
                                 <i class="ri-mail-line text-gray-400 mr-3 w-5"></i>
                                 <span class="text-gray-700">{{ session('subscription_email') }}</span>
@@ -63,7 +63,7 @@
                     </div>
 
                     <!-- Action buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-2">
                         <a href="{{ route('subscriptions.create') }}" class="bg-indigo-600 text-white hover:bg-indigo-700 transition-colors duration-200 font-semibold py-3 px-6 rounded-lg shadow-md flex items-center justify-center">
                             <i class="ri-add-line mr-2"></i>
                             Create Another Alert

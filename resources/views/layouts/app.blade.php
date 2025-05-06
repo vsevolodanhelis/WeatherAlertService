@@ -338,6 +338,26 @@
         </div>
     </div>
 
+    <!-- Loading animation component -->
+    <div id="loading-spinner"
+         class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden"
+         x-data="{ show: false }"
+         x-show="show"
+         x-cloak
+         @loading.window="show = $event.detail.show">
+        <div class="bg-white rounded-lg p-5 flex flex-col items-center max-w-sm mx-auto">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mb-4"></div>
+            <p class="text-gray-700 text-lg font-medium" x-text="$event.detail.message || 'Loading...'"></p>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button id="back-to-top"
+            class="fixed bottom-8 right-8 bg-indigo-600 text-white rounded-full p-2 shadow-lg z-40 hidden hover:bg-indigo-700 transition-all duration-300 transform hover:scale-110"
+            onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i class="ri-arrow-up-line text-lg"></i>
+    </button>
+
     <!-- Custom scripts -->
     <script>
         // Function to show toast notifications
@@ -345,7 +365,27 @@
             window.dispatchEvent(new CustomEvent('notify', { detail: { message } }));
         }
 
+        // Function to show/hide loading spinner
+        window.showLoading = function(show = true, message = 'Loading...') {
+            window.dispatchEvent(new CustomEvent('loading', {
+                detail: { show, message }
+            }));
+        }
 
+        // Back to top button functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTopButton = document.getElementById('back-to-top');
+
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.remove('hidden');
+                    backToTopButton.classList.add('flex');
+                } else {
+                    backToTopButton.classList.add('hidden');
+                    backToTopButton.classList.remove('flex');
+                }
+            });
+        });
     </script>
 </body>
 </html>

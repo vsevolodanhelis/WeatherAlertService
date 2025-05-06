@@ -1,6 +1,12 @@
-# Weather Alert Service
+# Weather Alert Service (v1.2)
 
 A modern web application that allows you to receive up-to-date weather information for specified cities and subscribe to notifications about certain weather conditions. The system automatically sends notifications to registered users when their specified conditions are met.
+
+## Version History
+
+- **v1.2** - UI improvements: optimized spacing between sections, improved title positioning, reduced back-to-top button size
+- **v1.1** - Added detailed weather forecasts, additional metrics, and expanded alert types
+- **v1.0** - Initial release with basic weather data and alert functionality
 
 ## Features
 

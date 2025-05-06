@@ -3,6 +3,22 @@
 @section('title', 'Weather for ' . $city)
 
 @section('content')
+    <script>
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                window.notify('Link copied to clipboard!');
+            }, function() {
+                window.notify('Failed to copy link');
+            });
+        }
+
+        // Show loading animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading animation after page is fully loaded
+            window.showLoading(false);
+        });
+    </script>
     <div class="max-w-4xl mx-auto">
         <!-- Back button -->
         <div class="mb-6">
@@ -45,12 +61,35 @@
             </div>
 
             <!-- Card body with weather details -->
-            <div class="bg-white p-6">
+            <div class="bg-white p-6" x-data="{ unit: 'metric' }">
+                <!-- Unit conversion toggle -->
+                <div class="flex justify-end mb-4">
+                    <div class="bg-gray-100 rounded-full p-1 inline-flex">
+                        <button @click="unit = 'metric'"
+                                :class="unit === 'metric' ? 'bg-indigo-600 text-white' : 'bg-transparent text-gray-600'"
+                                class="px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200">
+                            °C
+                        </button>
+                        <button @click="unit = 'imperial'"
+                                :class="unit === 'imperial' ? 'bg-indigo-600 text-white' : 'bg-transparent text-gray-600'"
+                                class="px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200">
+                            °F
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Temperature display -->
                 <div class="flex justify-center items-center mb-6">
                     <div class="text-center">
-                        <div class="text-6xl font-bold text-gray-800 mb-2">{{ $temperature }}°C</div>
-                        <p class="text-gray-500">Feels like {{ $feels_like }}°C</p>
+                        <div class="text-6xl font-bold text-gray-800 mb-2">
+                            <span x-show="unit === 'metric'">{{ $temperature }}°C</span>
+                            <span x-show="unit === 'imperial'" x-cloak>{{ round($temperature * 9/5 + 32) }}°F</span>
+                        </div>
+                        <p class="text-gray-500">
+                            Feels like
+                            <span x-show="unit === 'metric'">{{ $feels_like }}°C</span>
+                            <span x-show="unit === 'imperial'" x-cloak>{{ round($feels_like * 9/5 + 32) }}°F</span>
+                        </p>
                     </div>
                 </div>
 
@@ -71,7 +110,11 @@
                             </div>
                             <div>
                                 <p class="text-gray-500 text-sm">Wind</p>
-                                <p class="text-gray-800 font-semibold">{{ $wind_speed }} m/s {{ $wind_direction }}</p>
+                                <p class="text-gray-800 font-semibold">
+                                    <span x-show="unit === 'metric'">{{ $wind_speed }} m/s</span>
+                                    <span x-show="unit === 'imperial'" x-cloak>{{ round($wind_speed * 2.237, 1) }} mph</span>
+                                    {{ $wind_direction }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -110,7 +153,10 @@
                             </div>
                             <div>
                                 <p class="text-gray-500 text-sm">Dew Point</p>
-                                <p class="text-gray-800 font-semibold">{{ $dew_point }}°C</p>
+                                <p class="text-gray-800 font-semibold">
+                                    <span x-show="unit === 'metric'">{{ $dew_point }}°C</span>
+                                    <span x-show="unit === 'imperial'" x-cloak>{{ round($dew_point * 9/5 + 32) }}°F</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -123,7 +169,10 @@
                             </div>
                             <div>
                                 <p class="text-gray-500 text-sm">Visibility</p>
-                                <p class="text-gray-800 font-semibold">{{ $visibility }} km</p>
+                                <p class="text-gray-800 font-semibold">
+                                    <span x-show="unit === 'metric'">{{ $visibility }} km</span>
+                                    <span x-show="unit === 'imperial'" x-cloak>{{ round($visibility * 0.621, 1) }} mi</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -139,6 +188,32 @@
                                 <p class="text-gray-800 font-semibold">{{ date('H:i', $sunrise) }} / {{ date('H:i', $sunset) }}</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Share weather information -->
+                <div class="mb-6 text-center">
+                    <p class="text-gray-600 mb-3">Share this weather information</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="https://twitter.com/intent/tweet?text=Weather in {{ urlencode($city) }}: {{ $temperature }}°C, {{ ucfirst($description) }}&url={{ urlencode(url()->current()) }}"
+                           target="_blank"
+                           class="text-black p-2 rounded-full hover:text-gray-700 transition-colors duration-200">
+                            <i class="ri-twitter-x-line text-xl"></i>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
+                           target="_blank"
+                           class="text-black p-2 rounded-full hover:text-gray-700 transition-colors duration-200">
+                            <i class="ri-facebook-fill text-xl"></i>
+                        </a>
+                        <a href="mailto:?subject=Weather in {{ $city }}&body=Current weather in {{ $city }}: {{ $temperature }}°C, {{ ucfirst($description) }}. Check it out: {{ url()->current() }}"
+                           class="text-black p-2 rounded-full hover:text-gray-700 transition-colors duration-200">
+                            <i class="ri-mail-line text-xl"></i>
+                        </a>
+                        <a href="https://www.instagram.com/"
+                           target="_blank"
+                           class="text-black p-2 rounded-full hover:text-gray-700 transition-colors duration-200">
+                            <i class="ri-instagram-line text-xl"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -193,8 +268,14 @@
                                         <i class="ri-cloud-line text-gray-500"></i>
                                     @endif
                                 </div>
-                                <p class="font-semibold text-gray-800">{{ $hour['temp'] }}°C</p>
-                                <p class="text-xs text-gray-500 mt-1">{{ $hour['wind_speed'] }} m/s</p>
+                                <p class="font-semibold text-gray-800">
+                                    <span x-show="unit === 'metric'">{{ $hour['temp'] }}°C</span>
+                                    <span x-show="unit === 'imperial'" x-cloak>{{ round($hour['temp'] * 9/5 + 32) }}°F</span>
+                                </p>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span x-show="unit === 'metric'">{{ $hour['wind_speed'] }} m/s</span>
+                                    <span x-show="unit === 'imperial'" x-cloak>{{ round($hour['wind_speed'] * 2.237, 1) }} mph</span>
+                                </p>
                             </div>
                         @endif
                     @endforeach
@@ -251,9 +332,11 @@
                                     </div>
 
                                     <div class="text-right w-16">
-                                        <span class="text-gray-400 text-sm">{{ $day['temp_min'] }}°</span>
+                                        <span x-show="unit === 'metric'" class="text-gray-400 text-sm">{{ $day['temp_min'] }}°</span>
+                                        <span x-show="unit === 'imperial'" x-cloak class="text-gray-400 text-sm">{{ round($day['temp_min'] * 9/5 + 32) }}°</span>
                                         <span class="mx-1 text-gray-300">-</span>
-                                        <span class="text-gray-800 font-medium">{{ $day['temp_max'] }}°</span>
+                                        <span x-show="unit === 'metric'" class="text-gray-800 font-medium">{{ $day['temp_max'] }}°</span>
+                                        <span x-show="unit === 'imperial'" x-cloak class="text-gray-800 font-medium">{{ round($day['temp_max'] * 9/5 + 32) }}°</span>
                                     </div>
                                 </div>
                             </div>

@@ -3,6 +3,25 @@
 @section('title', 'Check Weather')
 
 @section('content')
+    <script>
+        // Show loading animation when searching for a city
+        document.addEventListener('DOMContentLoaded', function() {
+            const weatherForm = document.getElementById('weather-search-form');
+            if (weatherForm) {
+                weatherForm.addEventListener('submit', function() {
+                    window.showLoading(true, 'Fetching weather data...');
+                });
+            }
+
+            // Add loading to popular city links
+            const cityLinks = document.querySelectorAll('.popular-city-link');
+            cityLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    window.showLoading(true, 'Fetching weather data...');
+                });
+            });
+        });
+    </script>
     <div class="max-w-4xl mx-auto">
         <!-- Enhanced page header with gradient background -->
         <div class="text-center mb-10 bg-gradient-to-r from-indigo-100 to-blue-100 rounded-xl py-8 px-4 shadow-sm">
@@ -25,7 +44,7 @@
             <!-- No decorative elements -->
 
             <div class="relative px-6 py-10 md:p-10">
-                <form action="{{ route('weather.show') }}" method="GET" class="relative z-10 max-w-md mx-auto">
+                <form id="weather-search-form" action="{{ route('weather.show') }}" method="GET" class="relative z-10 max-w-md mx-auto">
                     <div class="text-center mb-8">
                         <i class="ri-map-pin-line text-3xl mb-3" style="color: white !important;"></i>
                         <h2 class="text-2xl font-bold" style="color: white !important;">Find Your Location</h2>
@@ -65,14 +84,17 @@
             </div>
         </div>
 
-        <!-- Enhanced popular cities section -->
-        <div class="mt-32 mb-24 px-4 sm:px-6 md:px-10 max-w-6xl mx-auto">
-            <div class="flex items-center justify-center mb-20">
+        <div class="text-center" style="margin-top: 20px;">
+            <div class="flex items-center justify-center">
                 <i class="ri-global-line text-indigo-600 text-2xl mr-2"></i>
                 <h2 class="text-2xl font-bold text-gray-800">Popular Cities</h2>
             </div>
+        </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8">
+        <!-- Enhanced popular cities section -->
+        <div class="mb-10 px-4 sm:px-6 md:px-10 max-w-6xl mx-auto">
+
+            <div class="grid grid-cols-2 md:grid-cols-4" style="gap: 30px;">
                 @php
                     $popularCities = [
                         ['name' => 'London', 'icon' => 'ri-cloud-line', 'color' => 'text-black'],
@@ -87,7 +109,7 @@
                 @endphp
 
                 @foreach($popularCities as $city)
-                    <a href="{{ route('weather.show', ['city' => $city['name']]) }}" class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 p-6 md:p-7 text-center transform hover:-translate-y-1">
+                    <a href="{{ route('weather.show', ['city' => $city['name']]) }}" class="popular-city-link bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 p-6 md:p-7 text-center transform hover:-translate-y-1">
                         <div class="{{ $city['color'] }} mb-4">
                             <i class="{{ $city['icon'] }} text-4xl"></i>
                         </div>
@@ -98,7 +120,7 @@
         </div>
 
         <!-- Enhanced weather information section with cards -->
-        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-8 md:p-10 mx-4 sm:mx-0 shadow-md mt-32">
+        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-8 md:p-10 mx-4 sm:mx-0 shadow-md" style="margin-top: 60px;">
             <div class="text-center mb-20 mt-12">
                 <div class="inline-flex items-center justify-center">
                     <h2 class="text-3xl font-bold text-indigo-800">Weather Service Features</h2>
